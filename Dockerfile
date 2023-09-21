@@ -4,9 +4,10 @@ USER root
 
 RUN apk add bind-tools jq
 
-USER kafka-proxy
-
 COPY startup /opt/startup
-RUN chmod +x /opt/startup/start.sh
+RUN chmod +x /opt/startup/start.sh && \
+    chown kafka-proxy:kafka-proxy /opt/startup/start.sh
+
+USER kafka-proxy
 
 ENTRYPOINT ["/opt/startup/start.sh"]
