@@ -23,7 +23,7 @@ dnsServerMapping() {
     mapped=$(cat $mappingFile | jq -r --arg RECORD "$dnsRecord" '.[$RECORD]')
     
     ## mapping returned an invalid result
-    if [[ $mapped == "null" ]];
+    if [[ "$mapped" == "null" ]];
     then
         echo "null"
         return
@@ -33,10 +33,10 @@ dnsServerMapping() {
     bootstrapServerArgs=""
     for row in $(echo "${mapped}" | jq -r '.[] | @base64'); do
         _jq() {
-            echo ${row} | base64 -d | jq -r ${1}
+            echo ${row} | base64 -d
         }
 
-        item=$(_jq '.' -r)
+        item=$(_jq)
         bootstrapServerArgs="$bootstrapServerArgs --bootstrap-server-mapping $item"
     done
 
@@ -45,7 +45,7 @@ dnsServerMapping() {
 
 bootstrapServerMapping=$(dnsServerMapping)
 
-if [[ $bootstrapServerMapping == "null" ]];
+if [[ "$bootstrapServerMapping" == "null" ]];
 then
     echo "Invalid DNS response for $txtDomain"
     exit 1
@@ -64,13 +64,13 @@ do
     sleep 10
 
     changedBootstrapServerMapping=$(dnsServerMapping)
-    if [[ $changedBootstrapServerMapping == "null" ]];
+    if [[ "$changedBootstrapServerMapping" == "null" ]];
     then
         echo "Invalid dns response, continue..."
         continue
     fi
 
-    if [[ $changedBootstrapServerMapping != $bootstrapServerMapping ]];
+    if [[ "$changedBootstrapServerMapping" != "$bootstrapServerMapping" ]];
     then
         echo "Send kill command as bootstrapserver has changed..."
         kill -2 $KAFKA_PROXY_PID
