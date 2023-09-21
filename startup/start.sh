@@ -33,7 +33,7 @@ dnsServerMapping() {
     bootstrapServerArgs=""
     for row in $(echo "${mapped}" | jq -r '.[] | @base64'); do
         _jq() {
-            echo ${row} | base64 --decode | jq -r ${1}
+            echo ${row} | base64 -q | jq -r ${1}
         }
 
         item=$(_jq '.' -r)
