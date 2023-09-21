@@ -37,7 +37,7 @@ dnsServerMapping() {
         }
 
         item=$(_jq)
-        bootstrapServerArgs="$bootstrapServerArgs --bootstrap-server-mapping $item"
+        bootstrapServerArgs="$bootstrapServerArgs $item"
     done
 
     echo $bootstrapServerArgs
