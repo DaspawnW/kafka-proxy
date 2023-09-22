@@ -1,4 +1,4 @@
-FROM grepplabs/kafka-proxy:0.3.6
+FROM ghcr.io/daspawnw/kafka-proxy-fk:27fc225254ae7319039c6fd4d1ba458d24bb4a84
 
 USER root
 
